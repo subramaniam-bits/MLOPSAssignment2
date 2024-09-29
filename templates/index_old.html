@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+        }
+        .input-focus-effect:focus {
+            transform: scale(1.02);
+            transition: transform 0.3s ease;
+        }
+        .button-hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        .result-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .result-fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 animate-gradient min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-2xl transform hover:scale-105 transition duration-300">
+        <div class="p-8">
+            <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 text-center mb-8">Diabetes Prediction</h1>
+            <form id="predictionForm" class="space-y-6">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div class="group">
+                        <label for="pregnancies" class="block text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors duration-300">Pregnancies</label>
+                        <input type="number" id="pregnancies" name="pregnancies" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 input-focus-effect">
+                        <p class="mt-1 text-xs text-gray-500 group-hover:text-gray-700 transition-colors duration-300">Number of times pregnant</p>
+                    </div>
+                    <div class="group">
+                        <label for="glucose" class="block text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors duration-300">Glucose</label>
+                        <input type="number" id="glucose" name="glucose" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 input-focus-effect">
+                        <p class="mt-1 text-xs text-gray-500 group-hover:text-gray-700 transition-colors duration-300">Plasma glucose concentration (mg/dL)</p>
+                    </div>
+                    <div class="group">
+                        <label for="bloodPressure" class="block text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors duration-300">Blood Pressure</label>
+                        <input type="number" id="bloodPressure" name="bloodPressure" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 input-focus-effect">
+                        <p class="mt-1 text-xs text-gray-500 group-hover:text-gray-700 transition-colors duration-300">Diastolic blood pressure (mm Hg)</p>
+                    </div>
+                    <div class="group">
+                        <label for="skinThickness" class="block text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors duration-300">Skin Thickness</label>
+                        <input type="number" id="skinThickness" name="skinThickness" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 input-focus-effect">
+                        <p class="mt-1 text-xs text-gray-500 group-hover:text-gray-700 transition-colors duration-300">Triceps skin fold thickness (mm)</p>
+                    </div>
+                    <div class="group">
+                        <label for="insulin" class="block text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors duration-300">Insulin</label>
+                        <input type="number" id="insulin" name="insulin" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 input-focus-effect">
+                        <p class="mt-1 text-xs text-gray-500 group-hover:text-gray-700 transition-colors duration-300">2-Hour serum insulin (mu U/ml)</p>
+                    </div>
+                    <div class="group">
+                        <label for="bmi" class="block text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors duration-300">BMI</label>
+                        <input type="number" id="bmi" name="bmi" step="0.1" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 input-focus-effect">
+                        <p class="mt-1 text-xs text-gray-500 group-hover:text-gray-700 transition-colors duration-300">Body mass index (kg/m²)</p>
+                    </div>
+                    <div class="group">
+                        <label for="diabetesPedigreeFunction" class="block text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors duration-300">Diabetes Pedigree Function</label>
+                        <input type="number" id="diabetesPedigreeFunction" name="diabetesPedigreeFunction" step="0.001" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 input-focus-effect">
+                        <p class="mt-1 text-xs text-gray-500 group-hover:text-gray-700 transition-colors duration-300">Diabetes pedigree function</p>
+                    </div>
+                    <div class="group">
+                        <label for="age" class="block text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors duration-300">Age</label>
+                        <input type="number" id="age" name="age" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 input-focus-effect">
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out button-hover-effect">
+                        Predict
+                    </button>
+                </div>
+            </form>
+            <div id="result" class="mt-6 text-lg font-semibold text-center result-fade-in"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Convert form data to the format expected by the API
+            const apiData = {
+                pregnancies: parseInt(data.pregnancies),
+                glucose: parseInt(data.glucose),
+                blood_pressure: parseInt(data.bloodPressure),
+                skin_thickness: parseInt(data.skinThickness),
+                insulin: parseInt(data.insulin),
+                bmi: parseFloat(data.bmi),
+                diabetes_pedigree_function: parseFloat(data.diabetesPedigreeFunction),
+                age: parseInt(data.age)
+            };
+
+            try {
+                const response = await fetch('http://192.168.0.194:5000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(apiData),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                const resultElement = document.getElementById('result');
+                resultElement.textContent = `Prediction: ${result.prediction}`;
+                resultElement.classList.remove('text-red-600', 'text-green-600');
+                resultElement.classList.add(result.prediction === 'Positive' ? 'text-red-600' : 'text-green-600');
+                resultElement.classList.add('show');
+            } catch (error) {
+                console.error('Error:', error);
+                const resultElement = document.getElementById('result');
+                resultElement.textContent = 'Error: Unable to get prediction';
+                resultElement.classList.remove('text-red-600', 'text-green-600');
+                resultElement.classList.add('text-red-600', 'show');
+            }
+        });
+    </script>
+</body>
+</html>

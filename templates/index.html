@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            padding: 1rem;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background-color: #f8fafc;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+
+        label {
+            position: absolute;
+            left: 0.75rem;
+            top: 0.75rem;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-size: 0.875rem;
+            color: #64748b;
+            background-color: transparent;
+            padding: 0 0.25rem;
+        }
+
+        input:focus + label,
+        input:not(:placeholder-shown) + label {
+            transform: translateY(-1.7rem) translateX(-0.25rem) scale(0.85);
+            background-color: white;
+            color: #3b82f6;
+        }
+
+        button {
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            width: 200px; /* Fixed width */
+            height: 50px; /* Fixed height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #4338ca, #6d28d9);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .result.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                width: 80%; /* Button width adjustment for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 class="text-3xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">Diabetes Prediction</h1>
+        <form id="predictionForm">
+            <div class="form-grid">
+                <div class="input-group">
+                    <input type="number" id="pregnancies" name="pregnancies" required placeholder=" ">
+                    <label for="pregnancies">Pregnancies</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="glucose" name="glucose" required placeholder=" ">
+                    <label for="glucose">Glucose</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="bloodPressure" name="bloodPressure" required placeholder=" ">
+                    <label for="bloodPressure">Blood Pressure</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="skinThickness" name="skinThickness" required placeholder=" ">
+                    <label for="skinThickness">Skin Thickness</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="insulin" name="insulin" required placeholder=" ">
+                    <label for="insulin">Insulin</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="bmi" name="bmi" step="0.1" required placeholder=" ">
+                    <label for="bmi">BMI</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="diabetesPedigreeFunction" name="diabetesPedigreeFunction" step="0.001" required placeholder=" ">
+                    <label for="diabetesPedigreeFunction">Diabetes Pedigree Function</label>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="age" name="age" required placeholder=" ">
+                    <label for="age">Age</label>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="submit">Predict</button>
+            </div>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            const apiData = {
+                pregnancies: parseInt(data.pregnancies),
+                glucose: parseInt(data.glucose),
+                blood_pressure: parseInt(data.bloodPressure),
+                skin_thickness: parseInt(data.skinThickness),
+                insulin: parseInt(data.insulin),
+                bmi: parseFloat(data.bmi),
+                diabetes_pedigree_function: parseFloat(data.diabetesPedigreeFunction),
+                age: parseInt(data.age)
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(apiData),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                const resultElement = document.getElementById('result');
+                resultElement.textContent = `Prediction: ${result.prediction}`;
+                resultElement.classList.remove('text-red-600', 'text-green-600');
+                resultElement.classList.add(result.prediction === 'Positive' ? 'text-red-600' : 'text-green-600');
+                resultElement.classList.add('show');
+            } catch (error) {
+                console.error('Error:', error);
+                const resultElement = document.getElementById('result');
+                resultElement.textContent = 'Error: Unable to get prediction';
+                resultElement.classList.remove('text-red-600', 'text-green-600');
+                resultElement.classList.add('text-red-600', 'show');
+            }
+        });
+    </script>
+</body>
+</html>
+
