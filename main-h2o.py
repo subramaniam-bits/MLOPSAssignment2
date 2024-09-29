@@ -2,9 +2,12 @@ from flask import Flask, request, jsonify, render_template
 import os
 import h2o
 import pandas as pd
+from flask_cors import CORS  # Import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
+
+CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins
 
 # Initialize H2O
 h2o.init()
